@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.iOS", "NoteTaker.iOS\NoteTaker.iOS.csproj", "{BA4919A8-6DF5-4865-B859-01B99DF727A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.Core", "ClassLibrary1\NoteTaker.Core.csproj", "{BD42799D-8941-4446-9B69-8821FA625627}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.Core", "NoteTaker.Core\NoteTaker.Core.csproj", "{BD42799D-8941-4446-9B69-8821FA625627}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
