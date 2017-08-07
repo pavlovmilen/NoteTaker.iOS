@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NoteTaker.Core.Models;
+using System;
 
 using UIKit;
 
@@ -6,16 +7,16 @@ namespace NoteTaker.iOS
 {
 	public partial class DetailViewController : UIViewController
 	{
-		public object DetailItem { get; set; }
+		public NoteEntryModel Note { get; set; }
 
 		public DetailViewController (IntPtr handle) : base (handle)
 		{
 		}
 
-		public void SetDetailItem (object newDetailItem)
+		public void SetDetailItem (NoteEntryModel note)
 		{
-			if (DetailItem != newDetailItem) {
-				DetailItem = newDetailItem;
+			if (Note != note) {
+				Note = note;
 				
 				// Update the view
 				ConfigureView ();
@@ -24,9 +25,13 @@ namespace NoteTaker.iOS
 
 		void ConfigureView ()
 		{
-			// Update the user interface for the detail item
-			if (IsViewLoaded && DetailItem != null)
-				detailDescriptionLabel.Text = DetailItem.ToString ();
+            // Update the user interface for the detail item
+            if (IsViewLoaded && Note != null)
+            {
+                NoteDesctiptionTextView.Text = Note.Text;
+                TitleTextField.Text = Note.Title;
+            }
+
 		}
 
 		public override void ViewDidLoad ()

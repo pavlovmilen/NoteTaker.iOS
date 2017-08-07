@@ -108,7 +108,12 @@
       <InProject>false</InProject>
     </ImageAsset>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\NoteTaker.Core\NoteTaker.Core.csproj">
+      <Project>{bd42799d-8941-4446-9b69-8821fa625627}</Project>
+      <Name>NoteTaker.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

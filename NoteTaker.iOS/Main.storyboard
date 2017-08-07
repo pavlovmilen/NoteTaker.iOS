@@ -42,13 +42,13 @@
                                 </constraints>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" id="21" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="16" y="126" width="584" height="507"/>
+                                <rect key="frame" x="0.0" y="126" width="600" height="507"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <constraints>
-                                    <constraint id="32" firstAttribute="width" constant="584"/>
-                                    <constraint id="33" firstAttribute="height" constant="507"/>
+                                    <constraint id="43" firstAttribute="width" constant="600"/>
+                                    <constraint id="44" firstAttribute="height" constant="507"/>
                                 </constraints>
                             </textView>
                         </subviews>
@@ -56,8 +56,8 @@
                         <constraints>
                             <constraint id="26" firstItem="19" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leading" constant="16"/>
                             <constraint id="27" firstItem="19" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="78"/>
-                            <constraint id="30" firstItem="svH-Pt-448" firstAttribute="trailing" secondItem="21" secondAttribute="trailing"/>
-                            <constraint id="31" firstItem="svH-Pt-448" firstAttribute="bottom" secondItem="21" secondAttribute="bottom" constant="-33"/>
+                            <constraint id="41" firstItem="svH-Pt-448" firstAttribute="trailing" secondItem="21" secondAttribute="trailing"/>
+                            <constraint id="42" firstItem="svH-Pt-448" firstAttribute="bottom" secondItem="21" secondAttribute="bottom" constant="-33"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
