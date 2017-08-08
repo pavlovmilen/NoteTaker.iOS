@@ -87,19 +87,25 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cells\NoteCell.cs" />
+    <Compile Include="Cells\NoteCell.designer.cs">
+      <DependentUpon>NoteCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <InterfaceDefinition Include="Cells\NoteCell.xib" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DetailViewController.cs" />
-    <Compile Include="DetailViewController.designer.cs">
+    <Compile Include="ViewControllers\DetailViewController.cs" />
+    <Compile Include="ViewControllers\DetailViewController.designer.cs">
       <DependentUpon>DetailViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="MasterViewController.cs" />
-    <Compile Include="MasterViewController.designer.cs">
+    <Compile Include="ViewControllers\MasterViewController.cs" />
+    <Compile Include="ViewControllers\MasterViewController.designer.cs">
       <DependentUpon>MasterViewController.cs</DependentUpon>
     </Compile>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -115,6 +121,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -123,5 +135,6 @@
   <ItemGroup>
     <Content Include="Entitlements.plist" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UIKit;
 using Foundation;
+using NoteTaker.iOS.Cells;
 
 namespace NoteTaker.iOS
 {
@@ -14,7 +15,9 @@ namespace NoteTaker.iOS
 
 		protected MasterViewController(IntPtr handle) : base(handle)
 		{
-			// Note: this .ctor should not contain any initialization logic.
+            // Note: this .ctor should not contain any initialization logic.
+
+            TableView.RegisterClassForCellReuse(typeof(NoteCell), "NoteCell");
 		}
 
 		public override void ViewDidLoad()
@@ -71,7 +74,7 @@ namespace NoteTaker.iOS
 
 		class DataSource : UITableViewSource
 		{
-			static readonly NSString CellIdentifier = new NSString("Cell");
+			static readonly NSString CellIdentifier = new NSString("NoteCell");
 			readonly List<object> objects = new List<object>();
 			readonly MasterViewController controller;
 
@@ -99,7 +102,7 @@ namespace NoteTaker.iOS
 			// Customize the appearance of table view cells.
 			public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 			{
-				var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath);
+				var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath) as NoteCell;
 
 				cell.TextLabel.Text = objects[indexPath.Row].ToString();
 
