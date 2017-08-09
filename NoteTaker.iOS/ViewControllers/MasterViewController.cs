@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UIKit;
 using Foundation;
+using NoteTaker.Core.ViewModels;
 using NoteTaker.iOS.Cells;
 
 namespace NoteTaker.iOS
@@ -34,8 +35,8 @@ namespace NoteTaker.iOS
 			NavigationItem.RightBarButtonItem = addButton;
 
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
-
-			TableView.Source = dataSource = new DataSource(this);
+            var viewModel = new NotesViewModel();
+			TableView.Source = dataSource = new DataSource(this, viewModel);
 		}
 
 		public override void ViewWillAppear(bool animated)
@@ -75,12 +76,13 @@ namespace NoteTaker.iOS
 		class DataSource : UITableViewSource
 		{
 			static readonly NSString CellIdentifier = new NSString("NoteCell");
-			readonly List<object> objects = new List<object>();
+		    private readonly NotesViewModel _viewModel;
 			readonly MasterViewController controller;
 
-			public DataSource(MasterViewController controller)
+			public DataSource(MasterViewController controller, NotesViewModel viewModel)
 			{
-				this.controller = controller;
+			    this.controller = controller;
+			    _viewModel = viewModel;
 			}
 
 			public IList<object> Objects
@@ -104,7 +106,12 @@ namespace NoteTaker.iOS
 			{
 				var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath) as NoteCell;
 
-				cell.TextLabel.Text = objects[indexPath.Row].ToString();
+			    if (cell == null)
+			    {
+			        return null;
+			    }
+
+                cell.UpdateCell();
 
 				return cell;
 			}
