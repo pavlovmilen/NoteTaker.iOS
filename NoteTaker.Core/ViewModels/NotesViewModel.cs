@@ -40,36 +40,23 @@ namespace NoteTaker.Core.ViewModels
         public async Task<bool> AddEntry(NoteEntryModel entry)
         {
 
-            var fileExists = await _rootFolder.CheckExistsAsync(Constants.DataFileName);
+            var notes = await GetNotes();
 
-            if (fileExists == ExistenceCheckResult.NotFound)
+            if (notes == null)
             {
                 return false;
             }
 
-            var file = await _rootFolder.GetFileAsync(Constants.DataFileName);
 
-            var fileData = await file.ReadAllTextAsync();
-
-            var notes = JsonConvert.DeserializeObject<List<NoteEntryModel>>(fileData);
-
-
+            notes.Add(entry);
+        
+            return await SaveNotes(notes);
         }
 
         public async Task<bool> RemoveEntry(NoteEntryModel entry)
         {
-            var fileExists = await _rootFolder.CheckExistsAsync(Constants.DataFileName);
 
-            if (fileExists == ExistenceCheckResult.NotFound)
-            {
-                return false;
-            }
-
-            var file = await _rootFolder.GetFileAsync(Constants.DataFileName);
-
-            var fileData = await file.ReadAllTextAsync();
-
-            var notes = JsonConvert.DeserializeObject<List<NoteEntryModel>>(fileData);
+            var notes = await GetNotes();
 
             var noteToRemove = notes?.FirstOrDefault(n => n.Id == entry.Id);
 
@@ -80,12 +67,47 @@ namespace NoteTaker.Core.ViewModels
 
             notes.Remove(noteToRemove);
 
-            var updatedFile =
-                await _rootFolder.CreateFileAsync(Constants.DataFileName, CreationCollisionOption.ReplaceExisting);
+            return await SaveNotes(notes);
+        }
 
-            await updatedFile.WriteAllTextAsync(JsonConvert.SerializeObject(notes));
 
-            return true;
+        private async Task<bool> SaveNotes(List<NoteEntryModel> notes)
+        {
+            try
+            {
+                var updatedFile =
+                    await _rootFolder.CreateFileAsync(Constants.DataFileName, CreationCollisionOption.ReplaceExisting);
+
+                await updatedFile.WriteAllTextAsync(JsonConvert.SerializeObject(notes));
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
+        private async Task<List<NoteEntryModel>> GetNotes()
+        {
+            var fileExists = await _rootFolder.CheckExistsAsync(Constants.DataFileName);
+
+            if (fileExists == ExistenceCheckResult.NotFound)
+            {
+                return new List<NoteEntryModel>();
+            }
+
+            var file = await _rootFolder.GetFileAsync(Constants.DataFileName);
+
+            var fileData = await file.ReadAllTextAsync();
+
+            var notes = JsonConvert.DeserializeObject<List<NoteEntryModel>>(fileData);
+
+            file = null;
+            fileData = null;
+
+            return notes;
         }
     }
 }

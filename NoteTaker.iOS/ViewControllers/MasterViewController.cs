@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UIKit;
 using Foundation;
+using NoteTaker.Core.Models;
 using NoteTaker.Core.ViewModels;
 using NoteTaker.iOS.Cells;
 
@@ -10,6 +11,7 @@ namespace NoteTaker.iOS
 {
 	public partial class MasterViewController : UITableViewController
 	{
+	    private NotesViewModel _viewModel;
 		public DetailViewController DetailViewController { get; set; }
 
 		DataSource dataSource;
@@ -21,7 +23,7 @@ namespace NoteTaker.iOS
             TableView.RegisterClassForCellReuse(typeof(NoteCell), "NoteCell");
 		}
 
-		public override void ViewDidLoad()
+		public override async void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 
@@ -30,13 +32,13 @@ namespace NoteTaker.iOS
 			// Perform any additional setup after loading the view, typically from a nib.
 			NavigationItem.LeftBarButtonItem = EditButtonItem;
 
-			var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add, AddNewItem);
-			addButton.AccessibilityLabel = "addButton";
-			NavigationItem.RightBarButtonItem = addButton;
-
+		    var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add, AddNewItem) {AccessibilityLabel = "addButton"};
+		    NavigationItem.RightBarButtonItem = addButton;
+            _viewModel = new NotesViewModel();
+		    await _viewModel.SetUp();
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
-            var viewModel = new NotesViewModel();
-			TableView.Source = dataSource = new DataSource(this, viewModel);
+
+			TableView.Source = dataSource = new DataSource(this, _viewModel);
 		}
 
 		public override void ViewWillAppear(bool animated)
@@ -53,7 +55,7 @@ namespace NoteTaker.iOS
 
 		void AddNewItem(object sender, EventArgs args)
 		{
-			dataSource.Objects.Insert(0, DateTime.Now);
+			dataSource.Notes.Add(new NoteEntryModel());
 
 			using (var indexPath = NSIndexPath.FromRowSection(0, 0))
 				TableView.InsertRows(new[] { indexPath }, UITableViewRowAnimation.Automatic);
@@ -65,7 +67,7 @@ namespace NoteTaker.iOS
 			{
 				var controller = (DetailViewController)((UINavigationController)segue.DestinationViewController).TopViewController;
 				var indexPath = TableView.IndexPathForSelectedRow;
-				var item = dataSource.Objects[indexPath.Row];
+				var item = dataSource.Notes[indexPath.Row];
 
 				controller.SetDetailItem(item);
 				controller.NavigationItem.LeftBarButtonItem = SplitViewController.DisplayModeButtonItem;
@@ -77,20 +79,17 @@ namespace NoteTaker.iOS
 		{
 			static readonly NSString CellIdentifier = new NSString("NoteCell");
 		    private readonly NotesViewModel _viewModel;
-			readonly MasterViewController controller;
+			readonly MasterViewController _controller;
 
 			public DataSource(MasterViewController controller, NotesViewModel viewModel)
 			{
-			    this.controller = controller;
+			    this._controller = controller;
 			    _viewModel = viewModel;
 			}
 
-			public IList<object> Objects
-			{
-				get { return objects; }
-			}
+			public IList<NoteEntryModel> Notes => _viewModel.Notes;
 
-			// Customize the number of sections in the table view.
+		    // Customize the number of sections in the table view.
 			public override nint NumberOfSections(UITableView tableView)
 			{
 				return 1;
@@ -98,7 +97,7 @@ namespace NoteTaker.iOS
 
 			public override nint RowsInSection(UITableView tableview, nint section)
 			{
-				return objects.Count;
+				return _viewModel.Notes.Count;
 			}
 
 			// Customize the appearance of table view cells.
@@ -111,7 +110,8 @@ namespace NoteTaker.iOS
 			        return null;
 			    }
 
-                cell.UpdateCell();
+                
+                cell.UpdateCell(Notes[indexPath.Row]);
 
 				return cell;
 			}
@@ -127,8 +127,8 @@ namespace NoteTaker.iOS
 				if (editingStyle == UITableViewCellEditingStyle.Delete)
 				{
 					// Delete the row from the data source.
-					objects.RemoveAt(indexPath.Row);
-					controller.TableView.DeleteRows(new[] { indexPath }, UITableViewRowAnimation.Fade);
+					_viewModel.Notes.RemoveAt(indexPath.Row);
+					_controller.TableView.DeleteRows(new[] { indexPath }, UITableViewRowAnimation.Fade);
 				}
 				else if (editingStyle == UITableViewCellEditingStyle.Insert)
 				{
@@ -138,7 +138,7 @@ namespace NoteTaker.iOS
 
 			public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
 			{
-				controller.DetailViewController.SetDetailItem(objects[indexPath.Row]);
+				_controller.DetailViewController.SetDetailItem(Notes[indexPath.Row]);
 			}
 		}
 	}
