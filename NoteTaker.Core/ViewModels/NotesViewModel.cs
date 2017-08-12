@@ -22,19 +22,28 @@ namespace NoteTaker.Core.ViewModels
 
         public async Task SetUp()
         {
-            _rootFolder = FileSystem.Current.LocalStorage;
-            var result = await _rootFolder.CheckExistsAsync(Constants.DataFileName);
-
-            if (result == ExistenceCheckResult.NotFound)
+            try
             {
-                await _rootFolder.CreateFileAsync(Constants.DataFileName, CreationCollisionOption.ReplaceExisting);
+                _rootFolder = FileSystem.Current.LocalStorage;
+                var result = await _rootFolder.CheckExistsAsync(Constants.DataFileName);
+
+                if (result == ExistenceCheckResult.NotFound)
+                {
+                    await _rootFolder.CreateFileAsync(Constants.DataFileName, CreationCollisionOption.ReplaceExisting);
+                }
+
+                var file = await _rootFolder.GetFileAsync(Constants.DataFileName);
+
+                var data = await file.ReadAllTextAsync();
+
+                Notes = data == null ? new ObservableCollection<NoteEntryModel>() : new ObservableCollection<NoteEntryModel>(JsonConvert.DeserializeObject<List<NoteEntryModel>>(data));
+               
             }
-
-            var file = await _rootFolder.GetFileAsync(Constants.DataFileName);
-
-            var data = await file.ReadAllTextAsync();
-
-            Notes = new ObservableCollection<NoteEntryModel>(JsonConvert.DeserializeObject<List<NoteEntryModel>>(data));
+            catch (Exception ex)
+            {
+               
+            }
+         
         }
 
         public async Task<bool> AddEntry(NoteEntryModel entry)

@@ -20,8 +20,9 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>x86_64</MtouchArch>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <MtouchSdkVersion>10.3</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -97,6 +98,7 @@
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <InterfaceDefinition Include="Main.storyboard" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +110,9 @@
     <Compile Include="ViewControllers\MasterViewController.designer.cs">
       <DependentUpon>MasterViewController.cs</DependentUpon>
     </Compile>
-    <InterfaceDefinition Include="Main.storyboard" />
+    <ImageAsset Include="Resources\Images.xcassets\LaunchImages.launchimage\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
       <InProject>false</InProject>

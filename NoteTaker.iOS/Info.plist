@@ -32,5 +32,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>XSLaunchImageAssets</key>
+	<string>Resources/Images.xcassets/LaunchImages.launchimage</string>
 </dict>
 </plist>

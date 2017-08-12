@@ -15,11 +15,11 @@ namespace NoteTaker.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextView NoteDesctiptionTextView { get; set; }
+        UIKit.UILabel NoteDesctiptionTextView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField TitleTextField { get; set; }
+        UIKit.UILabel TitleTextField { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
