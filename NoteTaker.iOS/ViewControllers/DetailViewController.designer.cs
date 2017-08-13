@@ -15,22 +15,22 @@ namespace NoteTaker.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel NoteDesctiptionTextView { get; set; }
+        UIKit.UITextView NoteDescriptionTextView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel TitleTextField { get; set; }
+        UIKit.UITextField TitleTextView { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (NoteDesctiptionTextView != null) {
-                NoteDesctiptionTextView.Dispose ();
-                NoteDesctiptionTextView = null;
+            if (NoteDescriptionTextView != null) {
+                NoteDescriptionTextView.Dispose ();
+                NoteDescriptionTextView = null;
             }
 
-            if (TitleTextField != null) {
-                TitleTextField.Dispose ();
-                TitleTextField = null;
+            if (TitleTextView != null) {
+                TitleTextView.Dispose ();
+                TitleTextView = null;
             }
         }
     }

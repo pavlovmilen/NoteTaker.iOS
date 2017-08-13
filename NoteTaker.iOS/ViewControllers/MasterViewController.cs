@@ -5,7 +5,7 @@ using UIKit;
 using Foundation;
 using NoteTaker.Core.Models;
 using NoteTaker.Core.ViewModels;
-using NoteTaker.iOS.Cells;
+using NoteTaker.Core.Services;
 
 namespace NoteTaker.iOS
 {
@@ -20,7 +20,7 @@ namespace NoteTaker.iOS
 		{
             // Note: this .ctor should not contain any initialization logic.
 
-            TableView.RegisterClassForCellReuse(typeof(NoteCell), "NoteCell");
+            //TableView.RegisterClassForCellReuse(typeof(NoteCell), "NoteCell");
 		}
 
 		public override async void ViewDidLoad()
@@ -34,7 +34,7 @@ namespace NoteTaker.iOS
 
 		    var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add, AddNewItem) {AccessibilityLabel = "addButton"};
 		    NavigationItem.RightBarButtonItem = addButton;
-            _viewModel = new NotesViewModel();
+            _viewModel = AppDelegate.Container.Resolve(typeof(NotesViewModel), "notesViewModel") as NotesViewModel;
 		    await _viewModel.SetUp();
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
 
@@ -77,7 +77,7 @@ namespace NoteTaker.iOS
 
 		class DataSource : UITableViewSource
 		{
-			static readonly NSString CellIdentifier = new NSString("NoteCell");
+			static readonly NSString CellIdentifier = new NSString("NoteTableCell");
 		    private readonly NotesViewModel _viewModel;
 			readonly MasterViewController _controller;
 
@@ -103,7 +103,7 @@ namespace NoteTaker.iOS
 			// Customize the appearance of table view cells.
 			public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 			{
-				var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath) as NoteCell;
+				var cell = tableView.DequeueReusableCell(CellIdentifier, indexPath) as NoteTableCell;
 
 			    if (cell == null)
 			    {

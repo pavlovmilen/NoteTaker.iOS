@@ -1,5 +1,9 @@
-﻿using Foundation;
+﻿using System;
+using Foundation;
 using UIKit;
+using NoteTaker.Core.Services;
+using NoteTaker.Core.ViewModels;
+using Microsoft.Practices.Unity;
 
 namespace NoteTaker.iOS
 {
@@ -9,6 +13,7 @@ namespace NoteTaker.iOS
 	public class AppDelegate : UIApplicationDelegate, IUISplitViewControllerDelegate
 	{
 		// class-level declarations
+        public static UnityContainer Container { get; set; }
 
 		public override UIWindow Window {
 			get;
@@ -17,7 +22,9 @@ namespace NoteTaker.iOS
 
 		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
 		{
-			// Override point for customization after application launch.
+            // Override point for customization after application launch.
+
+            SetupDI();
 			var splitViewController = (UISplitViewController)Window.RootViewController;
 			var navigationController = (UINavigationController)splitViewController.ViewControllers [1];
 			navigationController.TopViewController.NavigationItem.LeftBarButtonItem = splitViewController.DisplayModeButtonItem;
@@ -26,7 +33,16 @@ namespace NoteTaker.iOS
 			return true;
 		}
 
-		public override void OnResignActivation (UIApplication application)
+        private void SetupDI()
+        {
+            Container = new UnityContainer();
+
+            Container.RegisterType<INoteStorageService, NoteStorageService>();
+            Container.RegisterType<NotesViewModel, NotesViewModel>(new ContainerControlledLifetimeManager());
+
+        }
+
+        public override void OnResignActivation (UIApplication application)
 		{
 			// Invoked when the application is about to move from active to inactive state.
 			// This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) 

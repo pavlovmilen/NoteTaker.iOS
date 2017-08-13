@@ -15,7 +15,8 @@ namespace NoteTaker.iOS
 
 		public void SetDetailItem (NoteEntryModel note)
 		{
-			if (Note != note) {
+			if (Note != note)
+            {
 				Note = note;
 				
 				// Update the view
@@ -28,8 +29,8 @@ namespace NoteTaker.iOS
             // Update the user interface for the detail item
             if (IsViewLoaded && Note != null)
             {
-                NoteDesctiptionTextView.Text = Note.Text;
-                TitleTextField.Text = Note.Title;
+                NoteDescriptionTextView.Text = Note.Text;
+                TitleTextView.Text = Note.Title;
             }
 
 		}

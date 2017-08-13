@@ -8,6 +8,13 @@ namespace NoteTaker.Core.Models
 {
     public class NoteEntryModel
     {
+        public NoteEntryModel()
+        {
+            CreatedOn = DateTime.UtcNow;
+            Title = "New note";
+            Text = "No additional text";
+        }
+
         public int Id { get; set; }
         public string Title { get; set; }
 
