@@ -38,7 +38,7 @@ namespace NoteTaker.iOS
 		    await _viewModel.SetUp();
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
 
-			TableView.Source = dataSource = new DataSource(this, _viewModel);
+			TableView.Source = dataSource = new DataSource(this, _viewModel.Notes);
 		}
 
 		public override void ViewWillAppear(bool animated)
@@ -55,9 +55,12 @@ namespace NoteTaker.iOS
 
 		void AddNewItem(object sender, EventArgs args)
 		{
-			dataSource.Notes.Add(new NoteEntryModel());
 
-			using (var indexPath = NSIndexPath.FromRowSection(0, 0))
+
+            int lastPosition = dataSource.Notes.Count; // <= 1 ? dataSource.Notes.Count : dataSource.Notes.Count - 1;
+            dataSource.Notes.Add(new NoteEntryModel());
+
+            using (var indexPath = NSIndexPath.FromRowSection(lastPosition, 0))
 				TableView.InsertRows(new[] { indexPath }, UITableViewRowAnimation.Automatic);
 		}
 
@@ -72,22 +75,22 @@ namespace NoteTaker.iOS
 				controller.SetDetailItem(item);
 				controller.NavigationItem.LeftBarButtonItem = SplitViewController.DisplayModeButtonItem;
 				controller.NavigationItem.LeftItemsSupplementBackButton = true;
+                controller.NoteStorageService = _viewModel._noteStorageService;
 			}
 		}
 
 		class DataSource : UITableViewSource
 		{
 			static readonly NSString CellIdentifier = new NSString("NoteTableCell");
-		    private readonly NotesViewModel _viewModel;
 			readonly MasterViewController _controller;
 
-			public DataSource(MasterViewController controller, NotesViewModel viewModel)
+			public DataSource(MasterViewController controller, IList<NoteEntryModel> notes)
 			{
 			    this._controller = controller;
-			    _viewModel = viewModel;
+			    Notes = notes;
 			}
 
-			public IList<NoteEntryModel> Notes => _viewModel.Notes;
+			public IList<NoteEntryModel> Notes { get; set; }
 
 		    // Customize the number of sections in the table view.
 			public override nint NumberOfSections(UITableView tableView)
@@ -97,7 +100,7 @@ namespace NoteTaker.iOS
 
 			public override nint RowsInSection(UITableView tableview, nint section)
 			{
-				return _viewModel.Notes.Count;
+				return Notes.Count;
 			}
 
 			// Customize the appearance of table view cells.
@@ -127,7 +130,7 @@ namespace NoteTaker.iOS
 				if (editingStyle == UITableViewCellEditingStyle.Delete)
 				{
 					// Delete the row from the data source.
-					_viewModel.Notes.RemoveAt(indexPath.Row);
+					Notes.RemoveAt(indexPath.Row);
 					_controller.TableView.DeleteRows(new[] { indexPath }, UITableViewRowAnimation.Fade);
 				}
 				else if (editingStyle == UITableViewCellEditingStyle.Insert)

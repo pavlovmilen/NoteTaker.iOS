@@ -25,9 +25,8 @@ namespace NoteTaker.Core.Services
 
             if (notes == null)
             {
-                return false;
+                notes = new List<NoteEntryModel>();
             }
-
 
             notes.Add(note);
 

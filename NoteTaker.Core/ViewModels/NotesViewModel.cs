@@ -11,9 +11,7 @@ namespace NoteTaker.Core.ViewModels
 {
     public class NotesViewModel
     {
-        private IFolder _rootFolder;
-
-        private readonly INoteStorageService _noteStorageService;
+        public readonly INoteStorageService _noteStorageService;
         public ObservableCollection<NoteEntryModel> Notes { get; set; } = new ObservableCollection<NoteEntryModel>();
 
         public NotesViewModel(INoteStorageService noteStorageService)

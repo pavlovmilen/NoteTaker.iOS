@@ -14,5 +14,7 @@ namespace NoteTaker.Core.Services
         Task<bool> AddNote(NoteEntryModel note);
 
         Task<bool> RemoveNote(NoteEntryModel note);
+
+        //Task<string> NoteExists
     }
 }
