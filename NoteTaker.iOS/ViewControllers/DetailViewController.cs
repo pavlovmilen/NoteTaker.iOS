@@ -55,6 +55,11 @@ namespace NoteTaker.iOS
 
         private async void OnSave(object sender, EventArgs e)
         {
+            if (Note == null)
+            {
+                return;
+            }
+
             var exisingNoteText = await NoteStorageService.NoteExists(Note);
 
             if (string.IsNullOrEmpty(exisingNoteText))
@@ -63,7 +68,8 @@ namespace NoteTaker.iOS
             }
             else
             {
-                var alert = UIAlertController.Create("Error", exisingNoteText, UIAlertControllerStyle.Alert);
+                var alert = UIAlertController.Create("Warning", exisingNoteText, UIAlertControllerStyle.Alert);
+                alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                 PresentViewController(alert, true, null);
             }
 
