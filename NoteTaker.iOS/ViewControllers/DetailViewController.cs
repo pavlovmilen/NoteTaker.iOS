@@ -44,12 +44,29 @@ namespace NoteTaker.iOS
 			ConfigureView ();
 
             var saveButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, OnSave) { AccessibilityLabel = "saveButton" };
-            NavigationItem.RightBarButtonItem = saveButton;
+            var deleteButton = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnDelete) { AccessibilityLabel = "deleteButton" };
+            NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { saveButton, deleteButton };
+        }
+
+        private async void OnDelete(object sender, EventArgs e)
+        {
+            await NoteStorageService.RemoveNote(Note);
         }
 
         private async void OnSave(object sender, EventArgs e)
         {
-            await NoteStorageService.AddNote(Note);
+            var exisingNoteText = await NoteStorageService.NoteExists(Note);
+
+            if (string.IsNullOrEmpty(exisingNoteText))
+            {
+                await NoteStorageService.AddNote(Note);
+            }
+            else
+            {
+                var alert = UIAlertController.Create("Error", exisingNoteText, UIAlertControllerStyle.Alert);
+                PresentViewController(alert, true, null);
+            }
+
         }
 
         public override void DidReceiveMemoryWarning ()

@@ -6,6 +6,7 @@ using Foundation;
 using NoteTaker.Core.Models;
 using NoteTaker.Core.ViewModels;
 using NoteTaker.Core.Services;
+using CoreGraphics;
 
 namespace NoteTaker.iOS
 {
@@ -45,6 +46,8 @@ namespace NoteTaker.iOS
 		{
 			ClearsSelectionOnViewWillAppear = SplitViewController.Collapsed;
 			base.ViewWillAppear(animated);
+
+            TableView.SetContentOffset(new CGPoint(0,0), true);
 		}
 
 		public override void DidReceiveMemoryWarning()

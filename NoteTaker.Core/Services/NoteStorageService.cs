@@ -27,10 +27,24 @@ namespace NoteTaker.Core.Services
             {
                 notes = new List<NoteEntryModel>();
             }
+            SetNoteId(notes, note);
 
             notes.Add(note);
 
             return await SaveNotes(notes);
+        }
+
+        private void SetNoteId(List<NoteEntryModel> notes, NoteEntryModel note)
+        {
+            if (notes.Any())
+            {
+                var maxNoteId = notes.Select(n => n.Id).Max();
+                note.Id = ++maxNoteId;
+            }
+            else
+            {
+                note.Id = 1;
+            }
         }
 
         public async Task<bool> RemoveNote(NoteEntryModel note)
@@ -67,7 +81,7 @@ namespace NoteTaker.Core.Services
             file = null;
             fileData = null;
 
-            return notes;
+            return notes ?? new List<NoteEntryModel>();
         }
 
         private async Task<bool> SaveNotes(List<NoteEntryModel> notes)
@@ -110,6 +124,15 @@ namespace NoteTaker.Core.Services
             {
                 return new ObservableCollection<NoteEntryModel>();
             }
+        }
+
+        public async Task<string> NoteExists(NoteEntryModel note)
+        {
+            var notes = await GetNotes();
+
+            var noteExists = notes.Any(n => n.Title.Equals(note.Title, StringComparison.CurrentCultureIgnoreCase));
+
+            return noteExists ? "Note with same name already exists" : string.Empty;
         }
     }
 }
