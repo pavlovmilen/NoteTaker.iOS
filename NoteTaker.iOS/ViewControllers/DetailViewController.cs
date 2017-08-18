@@ -1,4 +1,5 @@
-﻿using NoteTaker.Core.Models;
+﻿using Acr.UserDialogs;
+using NoteTaker.Core.Models;
 using NoteTaker.Core.Services;
 using System;
 
@@ -50,7 +51,13 @@ namespace NoteTaker.iOS
 
         private async void OnDelete(object sender, EventArgs e)
         {
-            await NoteStorageService.RemoveNote(Note);
+            var result = await NoteStorageService.RemoveNote(Note);
+
+            if (result)
+            {
+                UserDialogs.Instance.Toast("Note deleted", TimeSpan.FromSeconds(3));
+                //notify masterviewcontroller
+            }
         }
 
         private async void OnSave(object sender, EventArgs e)
@@ -64,7 +71,13 @@ namespace NoteTaker.iOS
 
             if (string.IsNullOrEmpty(exisingNoteText))
             {
-                await NoteStorageService.AddNote(Note);
+                var result = await NoteStorageService.AddOrUpdateNote(Note);
+
+                if (result)
+                {
+                    UserDialogs.Instance.Toast("Note saved", TimeSpan.FromSeconds(3));
+                    //notify masterviewcontroller
+                }
             }
             else
             {

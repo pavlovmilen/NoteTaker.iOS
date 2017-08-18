@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>NoteTaker.iOS</string>
+	<string>NoteTaker</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.mandm.mynotetracker</string>
 	<key>CFBundleShortVersionString</key>
@@ -34,5 +34,7 @@
 	</array>
 	<key>XSLaunchImageAssets</key>
 	<string>Resources/Images.xcassets/LaunchImages.launchimage</string>
+	<key>XSAppIconAssets</key>
+	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
 </dict>
 </plist>

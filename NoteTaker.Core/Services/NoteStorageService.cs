@@ -7,6 +7,7 @@ using NoteTaker.Core.Models;
 using PCLStorage;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using Acr.UserDialogs;
 
 namespace NoteTaker.Core.Services
 {
@@ -19,7 +20,7 @@ namespace NoteTaker.Core.Services
             _rootFolder = FileSystem.Current.LocalStorage;
         }
 
-        public async Task<bool> AddNote(NoteEntryModel note)
+        public async Task<bool> AddOrUpdateNote(NoteEntryModel note)
         {
             var notes = await GetNotes();
 
@@ -27,7 +28,19 @@ namespace NoteTaker.Core.Services
             {
                 notes = new List<NoteEntryModel>();
             }
-            SetNoteId(notes, note);
+
+            if (note.Id == 0)
+            {
+                SetNoteId(notes, note);
+            }
+            else
+            {
+                var existingNote = notes.FirstOrDefault(n => n.Id == note.Id);
+                if (existingNote != null)
+                {
+                    notes.Remove(existingNote);
+                }
+            }
 
             notes.Add(note);
 
@@ -128,6 +141,11 @@ namespace NoteTaker.Core.Services
 
         public async Task<string> NoteExists(NoteEntryModel note)
         {
+            if (note.Id > 0)
+            {
+                return string.Empty;
+            }
+
             var notes = await GetNotes();
 
             var noteExists = notes.Any(n => n.Title.Equals(note.Title, StringComparison.CurrentCultureIgnoreCase));

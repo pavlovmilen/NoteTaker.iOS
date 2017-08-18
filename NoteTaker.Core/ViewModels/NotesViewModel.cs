@@ -26,7 +26,7 @@ namespace NoteTaker.Core.ViewModels
 
         public async Task<bool> AddEntry(NoteEntryModel entry)
         {
-            return await _noteStorageService.AddNote(entry);
+            return await _noteStorageService.AddOrUpdateNote(entry);
         }
 
         public async Task<bool> RemoveEntry(NoteEntryModel entry)

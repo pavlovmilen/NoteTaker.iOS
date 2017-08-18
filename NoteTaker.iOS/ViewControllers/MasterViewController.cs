@@ -14,6 +14,7 @@ namespace NoteTaker.iOS
 	{
 	    private NotesViewModel _viewModel;
 		public DetailViewController DetailViewController { get; set; }
+        public Action<NoteEntryModel> NoteUpdated { get; set; }
 
 		DataSource dataSource;
 
