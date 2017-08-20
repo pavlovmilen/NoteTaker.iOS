@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Collections.ObjectModel;
+using System.Linq;
 using UIKit;
 using Foundation;
 using NoteTaker.Core.Models;
 using NoteTaker.Core.ViewModels;
 using NoteTaker.Core.Services;
 using CoreGraphics;
+using NoteTaker.Core.Enums;
 
 namespace NoteTaker.iOS
 {
@@ -14,15 +16,12 @@ namespace NoteTaker.iOS
 	{
 	    private NotesViewModel _viewModel;
 		public DetailViewController DetailViewController { get; set; }
-        public Action<NoteEntryModel> NoteUpdated { get; set; }
 
 		DataSource dataSource;
 
 		protected MasterViewController(IntPtr handle) : base(handle)
 		{
             // Note: this .ctor should not contain any initialization logic.
-
-            //TableView.RegisterClassForCellReuse(typeof(NoteCell), "NoteCell");
 		}
 
 		public override async void ViewDidLoad()
@@ -37,13 +36,13 @@ namespace NoteTaker.iOS
 		    var addButton = new UIBarButtonItem(UIBarButtonSystemItem.Add, AddNewItem) {AccessibilityLabel = "addButton"};
 		    NavigationItem.RightBarButtonItem = addButton;
             _viewModel = AppDelegate.Container.Resolve(typeof(NotesViewModel), "notesViewModel") as NotesViewModel;
-		    await _viewModel.SetUp();
+		    await _viewModel?.SetUp();
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
 
-			TableView.Source = dataSource = new DataSource(this, _viewModel.Notes);
-		}
+            TableView.Source = dataSource = new DataSource(this, _viewModel.Notes);
+        }
 
-		public override void ViewWillAppear(bool animated)
+        public override void ViewWillAppear(bool animated)
 		{
 			ClearsSelectionOnViewWillAppear = SplitViewController.Collapsed;
 			base.ViewWillAppear(animated);
@@ -61,7 +60,7 @@ namespace NoteTaker.iOS
 		{
 
 
-            int lastPosition = dataSource.Notes.Count; // <= 1 ? dataSource.Notes.Count : dataSource.Notes.Count - 1;
+            int lastPosition = dataSource.Notes.Count;
             dataSource.Notes.Add(new NoteEntryModel());
 
             using (var indexPath = NSIndexPath.FromRowSection(lastPosition, 0))
@@ -80,21 +79,23 @@ namespace NoteTaker.iOS
 				controller.NavigationItem.LeftBarButtonItem = SplitViewController.DisplayModeButtonItem;
 				controller.NavigationItem.LeftItemsSupplementBackButton = true;
                 controller.NoteStorageService = _viewModel._noteStorageService;
+			    controller.OnEntityChanged = dataSource.OnEntryAddedOrUpdated;
 			}
 		}
 
 		class DataSource : UITableViewSource
 		{
-			static readonly NSString CellIdentifier = new NSString("NoteTableCell");
-			readonly MasterViewController _controller;
+			private static readonly NSString CellIdentifier = new NSString("NoteTableCell");
+			private readonly MasterViewController _controller;
 
 			public DataSource(MasterViewController controller, IList<NoteEntryModel> notes)
 			{
 			    this._controller = controller;
-			    Notes = notes;
+			    Notes = new ObservableCollection<NoteEntryModel>(notes);
+			   // _controller.DetailViewController.OnEntityChanged = OnEntryAddedOrUpdated;
 			}
 
-			public IList<NoteEntryModel> Notes { get; set; }
+			public ObservableCollection<NoteEntryModel> Notes { get; set; }
 
 		    // Customize the number of sections in the table view.
 			public override nint NumberOfSections(UITableView tableView)
@@ -147,6 +148,33 @@ namespace NoteTaker.iOS
 			{
 				_controller.DetailViewController.SetDetailItem(Notes[indexPath.Row]);
 			}
-		}
+
+		    public void OnEntryAddedOrUpdated(NoteEntryModel noteEntryModel, NoteOperationType noteOperationType)
+		    {
+		        if(noteOperationType == NoteOperationType.AddOrEdit)
+		        {
+		            var existingNote = Notes.FirstOrDefault(n => n.Id == noteEntryModel.Id);
+
+		            if (existingNote != null)
+		            {
+		                Notes.Remove(existingNote);
+		            }
+
+		            Notes.Add(noteEntryModel);
+                }
+
+                else if (noteOperationType == NoteOperationType.Delete)
+		        {
+		            var existingNote = Notes.FirstOrDefault(n => n.Id == noteEntryModel.Id);
+
+		            if (existingNote != null)
+		            {
+		                Notes.Remove(existingNote);
+		            }
+                }
+
+                _controller.TableView.ReloadData();
+		    }
+        }
 	}
 }

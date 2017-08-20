@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTaker.iOS", "NoteTaker.iOS\NoteTaker.iOS.csproj", "{BA4919A8-6DF5-4865-B859-01B99DF727A3}"
 EndProject
@@ -70,5 +70,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B6AF5B1-F6D9-4298-8C1D-D5302F772CE1}
 	EndGlobalSection
 EndGlobal

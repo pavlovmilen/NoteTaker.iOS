@@ -22,12 +22,7 @@ namespace NoteTaker.Core.Services
 
         public async Task<bool> AddOrUpdateNote(NoteEntryModel note)
         {
-            var notes = await GetNotes();
-
-            if (notes == null)
-            {
-                notes = new List<NoteEntryModel>();
-            }
+            var notes = await GetNotes() ?? new List<NoteEntryModel>();
 
             if (note.Id == 0)
             {
