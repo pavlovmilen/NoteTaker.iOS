@@ -15,6 +15,10 @@ namespace NoteTaker.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UISwitch NoteCompletedSwitch { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextView NoteDescriptionTextView { get; set; }
 
         [Outlet]
@@ -23,6 +27,11 @@ namespace NoteTaker.iOS
 
         void ReleaseDesignerOutlets ()
         {
+            if (NoteCompletedSwitch != null) {
+                NoteCompletedSwitch.Dispose ();
+                NoteCompletedSwitch = null;
+            }
+
             if (NoteDescriptionTextView != null) {
                 NoteDescriptionTextView.Dispose ();
                 NoteDescriptionTextView = null;

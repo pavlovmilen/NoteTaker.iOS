@@ -37,6 +37,10 @@ namespace NoteTaker.iOS
             {
                 NoteDescriptionTextView.Text = Note.Text;
                 TitleTextView.Text = Note.Title;
+                NoteCompletedSwitch.On = Note.IsCompleted;
+
+                TitleTextView.Hidden = false;
+                NoteCompletedSwitch.Hidden = false;
             }
 		}
 
@@ -52,7 +56,17 @@ namespace NoteTaker.iOS
 
             TitleTextView.AddTarget(TitleTextViewOnValueChanged, UIControlEvent.EditingChanged);// += TitleTextViewOnValueChanged;
             NoteDescriptionTextView.Changed += NoteDescriptionTextViewOnChanged;
-        }
+            NoteCompletedSwitch.ValueChanged += NoteCompletedSwitchOnValueChanged;
+
+		    TitleTextView.Hidden = NoteCompletedSwitch.Hidden = Note == null;
+           
+		}
+
+	    private void NoteCompletedSwitchOnValueChanged(object sender, EventArgs eventArgs)
+	    {
+	        var completed = ((UISwitch) sender).On;
+	        Note.IsCompleted = completed;
+	    }
 
 	    private void NoteDescriptionTextViewOnChanged(object sender, EventArgs eventArgs)
 	    {
