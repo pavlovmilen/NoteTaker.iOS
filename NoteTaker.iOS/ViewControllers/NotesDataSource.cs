@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Acr.UserDialogs;
 using Foundation;
 using NoteTaker.Core.Enums;
 using NoteTaker.Core.Models;
+using NoteTaker.Core.Services;
 using UIKit;
 
 namespace NoteTaker.iOS
@@ -13,10 +15,12 @@ namespace NoteTaker.iOS
     {
         private static readonly NSString CellIdentifier = new NSString("NoteTableCell");
         private readonly MasterViewController _controller;
+        private readonly INoteStorageService _noteStorageService;
 
-        public NotesDataSource(MasterViewController controller, IList<NoteEntryModel> notes)
+        public NotesDataSource(MasterViewController controller, IList<NoteEntryModel> notes, INoteStorageService noteStorageService)
         {
             this._controller = controller;
+            _noteStorageService = noteStorageService;
             Notes = new ObservableCollection<NoteEntryModel>(notes);
             // _controller.DetailViewController.OnEntityChanged = OnEntryAddedOrUpdated;
         }
@@ -56,13 +60,21 @@ namespace NoteTaker.iOS
             return true;
         }
 
-        public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
+        public override async void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
         {
             if (editingStyle == UITableViewCellEditingStyle.Delete)
             {
                 // Delete the row from the data source.
-                Notes.RemoveAt(indexPath.Row);
+                var existingNote = Notes[indexPath.Row];
+                Notes.Remove(existingNote);
                 _controller.TableView.DeleteRows(new[] { indexPath }, UITableViewRowAnimation.Fade);
+                var removeNote = _noteStorageService?.RemoveNote(existingNote);
+                var result = removeNote != null && await removeNote;
+
+                if (result)
+                {
+                    UserDialogs.Instance.Toast("Note deleted");
+                }
             }
             else if (editingStyle == UITableViewCellEditingStyle.Insert)
             {

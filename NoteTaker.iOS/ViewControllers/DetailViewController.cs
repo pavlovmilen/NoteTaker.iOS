@@ -38,13 +38,18 @@ namespace NoteTaker.iOS
                 NoteDescriptionTextView.Text = Note.Text;
                 TitleTextView.Text = Note.Title;
                 NoteCompletedSwitch.On = Note.IsCompleted;
-
-                TitleTextView.Hidden = false;
-                NoteCompletedSwitch.Hidden = false;
             }
 		}
 
-		public override void ViewDidLoad ()
+	    private void SetControlsVisibility()
+	    {
+	        TitleTextView.Hidden = false;
+	        NoteCompletedSwitch.Hidden = false;
+	        NoteImageView.Hidden = DeleteImageButton.Hidden = !Note.HasImage;
+	        AddImageButton.Hidden = Note.HasImage;
+	    }
+
+	    public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 			// Perform any additional setup after loading the view, typically from a nib.
@@ -54,11 +59,18 @@ namespace NoteTaker.iOS
             var deleteButton = new UIBarButtonItem(UIBarButtonSystemItem.Trash, OnDelete) { AccessibilityLabel = "deleteButton" };
             NavigationItem.RightBarButtonItems = new UIBarButtonItem[] { saveButton, deleteButton };
 
-            TitleTextView.AddTarget(TitleTextViewOnValueChanged, UIControlEvent.EditingChanged);// += TitleTextViewOnValueChanged;
+            TitleTextView.AddTarget(TitleTextViewOnValueChanged, UIControlEvent.EditingChanged);
             NoteDescriptionTextView.Changed += NoteDescriptionTextViewOnChanged;
             NoteCompletedSwitch.ValueChanged += NoteCompletedSwitchOnValueChanged;
 
-		    TitleTextView.Hidden = NoteCompletedSwitch.Hidden = Note == null;
+		    if (Note == null)
+		    {
+		        TitleTextView.Hidden = NoteCompletedSwitch.Hidden = NoteImageView.Hidden = DeleteImageButton.Hidden = AddImageButton.Hidden = true;
+		    }
+		    else
+		    {
+		        SetControlsVisibility();
+		    }
            
 		}
 

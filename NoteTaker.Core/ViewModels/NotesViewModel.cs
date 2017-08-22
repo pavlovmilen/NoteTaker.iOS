@@ -11,32 +11,32 @@ namespace NoteTaker.Core.ViewModels
 {
     public class NotesViewModel
     {
-        public readonly INoteStorageService _noteStorageService;
+        public INoteStorageService NoteStorageService { get; private set; }
         public ObservableCollection<NoteEntryModel> Notes { get; set; } = new ObservableCollection<NoteEntryModel>();
 
         public NotesViewModel(INoteStorageService noteStorageService)
         {
-            _noteStorageService = noteStorageService;
+            NoteStorageService = noteStorageService;
         }
 
         public async Task SetUp()
         {
-            Notes = await _noteStorageService.SetUp();
+            Notes = await NoteStorageService.SetUp();
         }
 
         public async Task<bool> AddEntry(NoteEntryModel entry)
         {
-            return await _noteStorageService.AddOrUpdateNote(entry);
+            return await NoteStorageService.AddOrUpdateNote(entry);
         }
 
         public async Task<bool> RemoveEntry(NoteEntryModel entry)
         {
-            return await _noteStorageService.RemoveNote(entry);
+            return await NoteStorageService.RemoveNote(entry);
         }
 
         private async Task<List<NoteEntryModel>> GetNotes()
         {
-            return await _noteStorageService.GetNotes();
+            return await NoteStorageService.GetNotes();
         }
     }
 }

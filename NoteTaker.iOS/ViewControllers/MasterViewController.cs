@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UIKit;
 using Foundation;
 using NoteTaker.Core.Models;
@@ -37,7 +38,8 @@ namespace NoteTaker.iOS
 		    await _viewModel?.SetUp();
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
 
-            TableView.Source = _dataSource = new NotesDataSource(this, _viewModel.Notes);
+            TableView.Source = _dataSource = new NotesDataSource(this, _viewModel.Notes, _viewModel.NoteStorageService);
+            TableView.ReloadData();
         }
 
         public override void ViewWillAppear(bool animated)
@@ -46,6 +48,12 @@ namespace NoteTaker.iOS
 			base.ViewWillAppear(animated);
 
             TableView.SetContentOffset(new CGPoint(0,0), true);
+
+		    var indexPath = NSIndexPath.FromRowSection(0, 0);
+		    if (_viewModel.Notes.Any())
+		    {
+		        TableView.SelectRow(indexPath, true, UITableViewScrollPosition.Bottom);
+		    }
 		}
 
 		public override void DidReceiveMemoryWarning()
@@ -56,8 +64,6 @@ namespace NoteTaker.iOS
 
 		void AddNewItem(object sender, EventArgs args)
 		{
-
-
             int lastPosition = _dataSource.Notes.Count;
             _dataSource.Notes.Add(new NoteEntryModel());
 
@@ -76,7 +82,7 @@ namespace NoteTaker.iOS
 				controller.SetDetailItem(item);
 				controller.NavigationItem.LeftBarButtonItem = SplitViewController.DisplayModeButtonItem;
 				controller.NavigationItem.LeftItemsSupplementBackButton = true;
-                controller.NoteStorageService = _viewModel._noteStorageService;
+                controller.NoteStorageService = _viewModel.NoteStorageService;
 
 			    if (controller.OnEntityChanged == null)
 			    {

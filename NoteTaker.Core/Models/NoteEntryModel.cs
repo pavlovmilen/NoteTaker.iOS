@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace NoteTaker.Core.Models
 {
@@ -22,6 +23,11 @@ namespace NoteTaker.Core.Models
         public DateTime?  CompletedOn { get; set; }
 
         public bool IsCompleted { get; set; }
+
+        public string ImagePath { get; set; }
+
+        [JsonIgnore]
+        public bool HasImage => !string.IsNullOrEmpty(ImagePath);
 
     }
 }

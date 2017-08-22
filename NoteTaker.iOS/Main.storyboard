@@ -33,23 +33,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Text" borderStyle="roundedRect" minimumFontSize="17" id="51" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Text" borderStyle="roundedRect" minimumFontSize="17" id="51" translatesAutoresizingMaskIntoConstraints="NO">
                                 <rect key="frame" x="16" y="73" width="464" height="30"/>
                                 <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <constraints>
-                                    <constraint id="95" firstAttribute="width" constant="464"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="95"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="95"/>
-                                    </mask>
-                                </variation>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="55" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
                                 <rect key="frame" x="16" y="111" width="736" height="442"/>
@@ -81,30 +68,59 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="441" translatesAutoresizingMaskIntoConstraints="NO">
                                 <rect key="frame" x="705" y="72" width="51" height="31"/>
                             </switch>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1011" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="648" y="570" width="108" height="30"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="17"/>
+                                <state key="normal" title="Add Image"/>
+                                <constraints>
+                                    <constraint id="1124" firstAttribute="width" constant="108"/>
+                                    <constraint id="1125" firstAttribute="height" constant="30"/>
+                                </constraints>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="1073" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="31" y="570" width="560" height="420"/>
+                                <constraints>
+                                    <constraint id="1085" firstAttribute="height" constant="420"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1121" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="648" y="608" width="106" height="30"/>
+                                <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="17"/>
+                                <state key="normal" title="Delete Image">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <constraints>
+                                    <constraint id="1128" firstAttribute="height" constant="30"/>
+                                    <constraint id="1129" firstItem="1121" firstAttribute="width" constant="106"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint id="93" firstItem="51" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="73"/>
-                            <constraint id="94" firstItem="51" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leading" constant="16"/>
                             <constraint id="112" firstItem="55" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin"/>
                             <constraint id="117" firstItem="55" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="47"/>
-                            <constraint id="442" firstItem="441" firstAttribute="centerY" secondItem="51" secondAttribute="centerY"/>
                             <constraint id="443" firstItem="55" firstAttribute="top" secondItem="441" secondAttribute="bottom" constant="8"/>
                             <constraint id="444" firstItem="svH-Pt-448" firstAttribute="trailing" secondItem="441" secondAttribute="trailing" constant="14"/>
                             <constraint id="445" firstItem="441" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="8"/>
+                            <constraint id="983" firstItem="51" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leading" constant="16"/>
+                            <constraint id="984" firstItem="51" firstAttribute="top" secondItem="svH-Pt-448" secondAttribute="top" constant="73"/>
+                            <constraint id="986" firstItem="svH-Pt-448" firstAttribute="trailingMargin" secondItem="51" secondAttribute="trailing" constant="268"/>
+                            <constraint id="1082" firstItem="1073" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leading" constant="31"/>
+                            <constraint id="1083" firstItem="svH-Pt-448" firstAttribute="bottom" secondItem="1073" secondAttribute="bottom" constant="34"/>
+                            <constraint id="1086" firstItem="svH-Pt-448" firstAttribute="trailingMargin" secondItem="1073" secondAttribute="trailing" constant="157"/>
+                            <constraint id="1122" firstItem="svH-Pt-448" firstAttribute="trailing" secondItem="1011" secondAttribute="trailing" constant="12"/>
+                            <constraint id="1123" firstItem="svH-Pt-448" firstAttribute="bottom" secondItem="1011" secondAttribute="bottom" constant="424"/>
+                            <constraint id="1126" firstItem="svH-Pt-448" firstAttribute="trailing" secondItem="1121" secondAttribute="trailing" constant="14"/>
+                            <constraint id="1127" firstItem="svH-Pt-448" firstAttribute="bottom" secondItem="1121" secondAttribute="bottom" constant="386"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="93"/>
-                                <exclude reference="94"/>
                                 <exclude reference="112"/>
                                 <exclude reference="117"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=regular">
                             <mask key="constraints">
-                                <include reference="93"/>
-                                <include reference="94"/>
                                 <include reference="112"/>
                                 <include reference="117"/>
                             </mask>
@@ -116,6 +132,9 @@
                         <outlet property="TitleTextView" destination="51" id="name-outlet-51"/>
                         <outlet property="NoteDescriptionTextView" destination="55" id="name-outlet-55"/>
                         <outlet property="NoteCompletedSwitch" destination="441" id="name-outlet-441"/>
+                        <outlet property="AddImageButton" destination="1011" id="name-outlet-1011"/>
+                        <outlet property="NoteImageView" destination="1073" id="name-outlet-1073"/>
+                        <outlet property="DeleteImageButton" destination="1121" id="name-outlet-1121"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
@@ -152,8 +171,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                            <rect key="frame" x="0.0" y="0.0" width="90" height="20"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                            <rect key="frame" x="16" y="0.0" width="74" height="20"/>
                                             <fontDescription key="fontDescription" name="AmericanTypewriter" family="American Typewriter" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>

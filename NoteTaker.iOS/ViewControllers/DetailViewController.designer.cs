@@ -15,6 +15,14 @@ namespace NoteTaker.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton AddImageButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton DeleteImageButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UISwitch NoteCompletedSwitch { get; set; }
 
         [Outlet]
@@ -23,10 +31,24 @@ namespace NoteTaker.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView NoteImageView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField TitleTextView { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
+            if (AddImageButton != null) {
+                AddImageButton.Dispose ();
+                AddImageButton = null;
+            }
+
+            if (DeleteImageButton != null) {
+                DeleteImageButton.Dispose ();
+                DeleteImageButton = null;
+            }
+
             if (NoteCompletedSwitch != null) {
                 NoteCompletedSwitch.Dispose ();
                 NoteCompletedSwitch = null;
@@ -35,6 +57,11 @@ namespace NoteTaker.iOS
             if (NoteDescriptionTextView != null) {
                 NoteDescriptionTextView.Dispose ();
                 NoteDescriptionTextView = null;
+            }
+
+            if (NoteImageView != null) {
+                NoteImageView.Dispose ();
+                NoteImageView = null;
             }
 
             if (TitleTextView != null) {
