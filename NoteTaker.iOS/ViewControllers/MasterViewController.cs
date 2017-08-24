@@ -39,6 +39,13 @@ namespace NoteTaker.iOS
 			DetailViewController = (DetailViewController)((UINavigationController)SplitViewController.ViewControllers[1]).TopViewController;
 
             TableView.Source = _dataSource = new NotesDataSource(this, _viewModel.Notes, _viewModel.NoteStorageService);
+
+		    if (_viewModel.Notes.Any())
+		    {
+		        var indexPath = NSIndexPath.FromRowSection(0, 0);
+		        TableView.SelectRow(indexPath, true, UITableViewScrollPosition.Bottom);
+		    }
+
             TableView.ReloadData();
         }
 
@@ -48,12 +55,6 @@ namespace NoteTaker.iOS
 			base.ViewWillAppear(animated);
 
             TableView.SetContentOffset(new CGPoint(0,0), true);
-
-		    var indexPath = NSIndexPath.FromRowSection(0, 0);
-		    if (_viewModel.Notes.Any())
-		    {
-		        TableView.SelectRow(indexPath, true, UITableViewScrollPosition.Bottom);
-		    }
 		}
 
 		public override void DidReceiveMemoryWarning()

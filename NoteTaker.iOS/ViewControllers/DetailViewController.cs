@@ -3,6 +3,7 @@ using NoteTaker.Core.Models;
 using NoteTaker.Core.Services;
 using System;
 using NoteTaker.Core.Enums;
+using Plugin.Media;
 using UIKit;
 
 namespace NoteTaker.iOS
@@ -38,6 +39,12 @@ namespace NoteTaker.iOS
                 NoteDescriptionTextView.Text = Note.Text;
                 TitleTextView.Text = Note.Title;
                 NoteCompletedSwitch.On = Note.IsCompleted;
+
+                if (!string.IsNullOrEmpty(Note.ImagePath))
+                {
+                    ShowImage();
+                    NoteImageView.Image = UIImage.FromFile(Note.ImagePath);
+                }
             }
 		}
 
@@ -62,7 +69,8 @@ namespace NoteTaker.iOS
             TitleTextView.AddTarget(TitleTextViewOnValueChanged, UIControlEvent.EditingChanged);
             NoteDescriptionTextView.Changed += NoteDescriptionTextViewOnChanged;
             NoteCompletedSwitch.ValueChanged += NoteCompletedSwitchOnValueChanged;
-
+            AddImageButton.TouchUpInside += AddImageButton_TouchUpInside;
+            DeleteImageButton.TouchUpInside += DeleteImageButton_TouchUpInside;
 		    if (Note == null)
 		    {
 		        TitleTextView.Hidden = NoteCompletedSwitch.Hidden = NoteImageView.Hidden = DeleteImageButton.Hidden = AddImageButton.Hidden = true;
@@ -74,7 +82,44 @@ namespace NoteTaker.iOS
            
 		}
 
-	    private void NoteCompletedSwitchOnValueChanged(object sender, EventArgs eventArgs)
+        private void DeleteImageButton_TouchUpInside(object sender, EventArgs e)
+        {
+            Note.ImagePath = null;
+            NoteImageView.Hidden = DeleteImageButton.Hidden = true;
+            AddImageButton.Hidden = false;
+        }
+
+	    private void ShowImage()
+	    {
+	        NoteImageView.Hidden = DeleteImageButton.Hidden = false;
+	        AddImageButton.Hidden = true;
+        }
+
+	    private async void AddImageButton_TouchUpInside(object sender, EventArgs e)
+        {
+            var pickerStarted = await CrossMedia.Current.Initialize();
+
+            if (pickerStarted)
+            {
+                var picker = CrossMedia.Current;
+
+                if (!picker.IsPickPhotoSupported)
+                {
+                    return;
+                }
+
+                var result = await picker.PickPhotoAsync();
+
+                if (!string.IsNullOrEmpty(result?.Path))
+                {
+                    NoteImageView.Image = UIImage.FromFile(result.Path);
+                    Note.ImagePath = result.Path;
+                    ShowImage();
+                }                
+            }
+        }
+
+        private void NoteCompletedSwitchOnValueChanged(object sender, EventArgs eventArgs)
 	    {
 	        var completed = ((UISwitch) sender).On;
 	        Note.IsCompleted = completed;
